@@ -1,10 +1,10 @@
 IMAGE := vvizard/trlogic
 
 test:
-    go test -v ./...
+	go test -v ./...
 
 image:
-    docker build -t $(IMAGE) .
+	docker build -t $(IMAGE) .
 
 push-image:
-    docker push $(IMAGE)
+	docker push $(IMAGE)
