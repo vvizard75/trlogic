@@ -14,7 +14,7 @@ services:
 
 after_success:
   - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-  - make push-image
+  - docker push vvizard/trlogic
 
 
 env:
