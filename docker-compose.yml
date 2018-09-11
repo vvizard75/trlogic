@@ -1,0 +1,14 @@
+version: '2'
+services:
+  trlogic:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - images:/go/bin/images
+      - thumbs:/go/bin/thumbs
+    ports:
+    - "8081:8081"
+volumes:
+  images:
+  thumbs:
