@@ -1,0 +1,149 @@
+{{define "gallery"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <style>
+        .hide { position:absolute; top:-1px; left:-1px; width:1px; height:1px; }
+    </style>
+
+</head>
+<body>
+
+
+<iframe name="hiddenFrame" class="hide"></iframe>
+<div class="container">
+    <div class="row" style="margin-bottom:  100px;">
+        <div class="col-sm"  style="align-self: flex-end;">
+            <form action="/upload" method="post" enctype="multipart/form-data" id="sbt" >
+                <div class="form-group">
+                    <label for="files">Image file</label>
+                    <input type="file" class="form-control-file" name="files" id="files" aria-describedby="imageFiles" placeholder="Choose file" multiple>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+        </div>
+        <div class="col-sm" style="align-self: flex-end;">
+            <form action="/upload"  method="post" enctype="multipart/form-data" id="path">
+                <div class="form-group">
+                    <label for="imagePath">Image URL</label>
+                    <input type="text" class="form-control" id="imagePath" name="path" aria-describedby="imagePath" placeholder="Enter image URL">
+                    <small id="urllHelp" class="form-text text-muted">Please enter images URL</small>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+        </div>
+        <div class="col-sm" style="align-self: flex-end;">
+            <form action="/upload" method="post" enctype="application/json" id="formbase64">
+                <div class="form-group">
+                    <label for="imgname">Image name</label>
+                    <input type="text" class="form-control" id="imgname" name="name" aria-describedby="imgname" placeholder="Enter image name">
+                    <label for="base64">BASE 64</label>
+                    <textarea rows="5" name="img_data" id="base64"></textarea>
+                    <small id="base64Help" class="form-text text-muted">Please paste images in BASE64</small>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container">
+{{range $index, $val := .}}
+<a href="{{$val.Img}}" data-toggle="lightbox" data-gallery="mixedgallery" class="col-sm-4">
+    <img src="{{$val.Tmb}}" class="img-fluid">
+</a>
+{{end}}
+</div>
+{{/*{{range $index, $val := .}}*/}}
+    {{/*<a href="{{$val.Img}}"><img src="{{$val.Tmb}}" alt="..." class="img-thumbnail"></a>*/}}
+{{/*{{end}}*/}}
+</body>
+<script>
+    {{/*document.getElementById("sbt").onsubmit = function(){*/}}
+        {{/*setTimeout(window.location.reload(true), 50000);*/}}
+
+
+    {{/*}*/}}
+    $('#formbase64').on('submit', function(event){
+        let formData = $('form').serializeArray().reduce((obj, field) => {
+            obj[field.name] = field.value;
+            return obj;
+        }, {});
+        var obj = JSON.stringify(formData, null, ' ');
+        $.ajax({
+            type: "POST",
+            url: "/upload",
+            contentType: "application/json; charset=utf-8",
+            data: obj,
+            dataType: "json",
+            cache: "false",
+            success: function(data) {
+                console.log("Inside Success");
+                console.log(data);
+                window.location.reload();
+            },
+            error: function() {
+                alert('Error occurs!');
+            }
+        });
+
+
+        return false;
+    });
+
+    $('#sbt').on('submit', function(event){
+        var data = new FormData();
+        jQuery.each(jQuery('#files')[0].files, function(i, file) {
+            data.append('files', file);
+        });
+
+        jQuery.ajax({
+            url: '/upload',
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            method: 'POST',
+            type: 'POST', // For jQuery < 1.9
+            success: function(data){
+                console.log("Inside Success");
+                console.log(data);
+                window.location.reload();
+            }
+        });
+        return false;
+    });
+    $('#path').on('submit', function(event){
+        let data = $('form').serializeArray().reduce((obj, field) => {
+            obj[field.name] = field.value;
+            return obj;
+        }, {});
+
+        jQuery.ajax({
+            url: '/upload',
+            data: data,
+            cache: false,
+            // contentType: false,
+            // processData: false,
+            method: 'POST',
+            type: 'POST', // For jQuery < 1.9
+            success: function(data){
+                console.log("Inside Success");
+                console.log(data);
+                window.location.reload();
+            }
+        });
+        return false;
+    });
+</script>
+</html>
+{{end}}
