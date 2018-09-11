@@ -13,7 +13,6 @@ import (
 	"net/http"
 	"os/signal"
 	"time"
-	"trlogic/model"
 )
 import (
 	"fmt"
@@ -148,15 +147,15 @@ func getFilesFromForm(c echo.Context) {
 		fmt.Printf("Error parse multipartform: %s\n", err2)
 	}
 	if err != nil && err2 != nil {
-		result := new(model.Result)
+		result := new(Result)
 		result.Error = true
-		c.JSON(http.StatusBadRequest, [1]model.Result{*result})
+		c.JSON(http.StatusBadRequest, [1]Result{*result})
 		return
 	}
 
-	var results []model.Result
+	var results []Result
 	for _, f := range files {
-		result := new(model.Result)
+		result := new(Result)
 		id := xid.New().String()
 		filename := filepath.Base(f.Filename)
 		result.Filename, err = makePicFromFileHeader(f, id)
@@ -178,13 +177,13 @@ func getFileFromJson(c echo.Context) {
 		Name    string `json:"name"`
 		ImgData string `json:"img_data"`
 	}
-	result := new(model.Result)
+	result := new(Result)
 	result.Error = true
 
 	img := new(Image)
 	err := c.Bind(img)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, [1]model.Result{*result})
+		c.JSON(http.StatusBadRequest, [1]Result{*result})
 		fmt.Printf("Error parse JSON: %s\n", err)
 		return
 	}
@@ -192,7 +191,7 @@ func getFileFromJson(c echo.Context) {
 
 	rawData, err := base64.StdEncoding.DecodeString(img.ImgData)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, [1]model.Result{*result})
+		c.JSON(http.StatusBadRequest, [1]Result{*result})
 		fmt.Printf("Error encode BASE64: %s\n", err)
 		return
 	}
@@ -200,24 +199,24 @@ func getFileFromJson(c echo.Context) {
 	id := xid.New().String()
 	result.Filename, err = makePic(reader, img.Name, id)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, [1]model.Result{*result})
+		c.JSON(http.StatusBadRequest, [1]Result{*result})
 		fmt.Printf("Error encode  image base64: %s\n", err)
 		return
 	}
 	//result.Filename=id+"_"+result.Name
 	result.Error = false
-	c.JSON(http.StatusOK, [1]model.Result{*result})
+	c.JSON(http.StatusOK, [1]Result{*result})
 }
 func getFileFromPath(c echo.Context) {
 
 	path := c.FormValue("path")
 
-	result := new(model.Result)
+	result := new(Result)
 	result.Name = filepath.Base(path)
 	result.Error = true
 	resp, err := http.Get(path)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, [1]model.Result{*result})
+		c.JSON(http.StatusBadRequest, [1]Result{*result})
 		fmt.Printf("Error download image from path: %s\n", err)
 		return
 	}
@@ -225,13 +224,13 @@ func getFileFromPath(c echo.Context) {
 	id := xid.New().String()
 	result.Filename, err = makePic(resp.Body, result.Name, id)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, [1]model.Result{*result})
+		c.JSON(http.StatusBadRequest, [1]Result{*result})
 		fmt.Printf("Error encode  image path: %s\n", err)
 		return
 	}
 	result.Error = false
 	//result.Filename=id+"_"+result.Name
-	c.JSON(http.StatusOK, [1]model.Result{*result})
+	c.JSON(http.StatusOK, [1]Result{*result})
 }
 
 func makePicFromFileHeader(f *multipart.FileHeader, id string) (string, error) {

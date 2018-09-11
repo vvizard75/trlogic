@@ -15,7 +15,6 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
-	"trlogic/model"
 )
 
 func TestGetFileFromPath_goodImg(t *testing.T) {
@@ -105,9 +104,9 @@ func TestGetFileFromPath_badImg(t *testing.T) {
 
 }
 
-func getResults(rec *httptest.ResponseRecorder, t *testing.T) ([]*model.Result, error) {
+func getResults(rec *httptest.ResponseRecorder, t *testing.T) ([]*Result, error) {
 	t.Helper()
-	var results []*model.Result
+	var results []*Result
 	err := json.Unmarshal(rec.Body.Bytes(), &results)
 	if err != nil {
 		t.Errorf("Error binding: %s\n", err)
@@ -265,7 +264,7 @@ func TestMultiform(t *testing.T) {
 	}
 }
 
-func clearTestData(value *model.Result, t *testing.T) {
+func clearTestData(value *Result, t *testing.T) {
 	t.Helper()
 	err := os.Remove(storePath + "/" + value.Filename)
 	ext := filepath.Ext(value.Filename)
