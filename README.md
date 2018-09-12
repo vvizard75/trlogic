@@ -5,7 +5,7 @@ Simple web service for image gallery
 ## Table of Contents
 1. [Installation](#installation)
 2. [Docker](#docker)
-3. [Environment variables](#environment-variables)
+3. [API](#api)
 
 ## Installation
     git clone https://github.com/vvizard75/trlogic
