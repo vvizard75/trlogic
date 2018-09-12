@@ -29,7 +29,7 @@ You must use POST request to /upload
 
 - you can send a multipart request looks a little like this:
 
-
+```
     POST /upload HTTP/1.1
     Host: localhost:8081
     Content-Type: multipart/form-data; boundary=MultipartBoundry
@@ -41,22 +41,25 @@ You must use POST request to /upload
 
     rawimagecontentwhichlooksfunnyandgoesonforever.d.sf.d.f.sd.fsdkfjkslhfdkshfkjsdfdkfh
     --MultipartBoundry--
+```
 
 - you can send a request with URL images from Internet looks a little like this:
 
-
+```
     POST /upload HTTP/1.1
     Host: localhost:8081
     Content-Type: application/x-www-form-urlencoded;
     path=https://cdn.pixabay.com/photo/2015/10/06/19/28/landscape-975091_960_720.jpg
+```
 
 - you can send a request with image in BASE64 looks a little like this:
 
-
-	POST /upload HTTP/1.1
-	Host: localhost:8080
-	Content-Type: application/json
-	{
-  	"name": "test_image",
-  	"img_data": "/9j/4RRtRXhpZgAATU0AKgAAAAgABwESAAMAAAABAAEAAAEaAAUAAAABAAAAYgEbAAUAAAABAAAAagEoAAMAAAABAAIAAAExAAIAAAAcAAAAcgEyAAIAAAAUAAAAjodpAAQAAAABAAAApAAAANAACvyAAAAnEAA"
-	}
+```
+    POST /upload HTTP/1.1
+    Host: localhost:8080
+    Content-Type: application/json
+    {
+    "name": "test_image",
+    "img_data": "/9j/4RRtRXhpZgAATU0AKgAAAAgABwESAAMAAAABAAEAAAEaAAUAAAABAAAAYgEbAAUAAAABAAAAagEoAAMAAAABAAIAAAExAAIAAAAcAAAAcgEyAAIAAAAUAAAAjodpAAQAAAABAAAApAAAANAACvyAAAAnEAA"
+    }
+```
