@@ -7,6 +7,9 @@ image:
 	docker build -t $(IMAGE) .
 
 push-image:
-	docker push $(IMAGE)
 	docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-	docker push vvizard/trlogic
+	export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+	docker build -f Dockerfile -t $REPO:$COMMIT .
+	docker tag $IMAGE:$COMMIT $IMAGE:$TAG
+	docker tag $IMAGE:$COMMIT $IMAGE:travis-$TRAVIS_BUILD_NUMBER
+	docker push $IMAGE
