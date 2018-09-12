@@ -1,5 +1,7 @@
 # Image gallery Web-Service
 
+[![Build Status](https://travis-ci.org/vvizard75/trlogic.svg?branch=master)](https://travis-ci.org/vvizard75/trlogic)
+
 Simple web service for image gallery
 
 ## Table of Contents
