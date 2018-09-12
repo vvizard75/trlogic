@@ -1,9 +1,7 @@
 version: '2'
 services:
   trlogic:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: vvizard/trlogic:latest
     volumes:
       - images:/go/bin/images
       - thumbs:/go/bin/thumbs
