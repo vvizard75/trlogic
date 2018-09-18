@@ -58,8 +58,6 @@ func main() {
 	server.POST("/upload", chooseHandler)
 	server.GET("/", gallery)
 
-	server.Logger.Fatal(server.Start(":" + port))
-
 	go func() {
 		if err := server.Start(":" + port); err != nil {
 			server.Logger.Info("shutting down the server")
